@@ -32,7 +32,7 @@ def makeprog(env, onlyfor_sources, progname, srcs, exts):
     env.Program(OUT_DIR + progname + exts[1], objects_onlyfor + srcs)
 
 def makeObj(env, srcs, suf):
-    if type(srcs) != types.ListType:
+    if type(srcs) != list:
         srcs = [srcs]
     ret = []
     for src in srcs:
@@ -76,7 +76,7 @@ def runUnitTest(env,target,source):
 
 gtest = os.path.join(lib, 'libgtest.a')
 gtest_main = os.path.join(lib, 'libgtest_main.a')
-print gtest, gtest_main
+print(gtest, gtest_main)
 if os.path.exists(gtest) and os.path.exists(gtest_main):
     testProg = OUT_DIR + 'runTests'
     envTEST = env.Clone(CPPPATH = ['./', include],
@@ -98,4 +98,4 @@ if os.path.exists(gtest) and os.path.exists(gtest_main):
     test_alias = Alias(testProg, [program], program[0].abspath)
     AlwaysBuild(test_alias)
 else:
-    print "Google test not found in /opt/local/lib/. Testing skipped."
+    print("Google test not found in /opt/local/lib/. Testing skipped.")
