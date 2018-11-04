@@ -29,3 +29,6 @@
 *.pyc
 
 data/out/*
+out/
+.sconsign.dblite
+.vscode/
