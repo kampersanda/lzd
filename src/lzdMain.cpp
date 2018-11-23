@@ -23,7 +23,8 @@ void usage(char* argv[]) {
             << "Options: " << std::endl
             << "  -f FileName          : input file" << std::endl
             << "  -o FileName          : output file" << std::endl
-            << "  -c                   : check whether decompressed string equals the input" << std::endl
+            << "  -c                   : check whether decompressed string equals the input"
+            << std::endl
             << "  -d NUM               : set the debug level" << std::endl
             << "  -l maxSize           : set max code size" << std::endl
             << "  -a lz78              : LZ78" << std::endl
@@ -77,8 +78,9 @@ int main(int argc, char* argv[]) {
     }
   }
   if (help || !(algoname == algo::LZD || algoname == algo::LZMW || algoname == algo::LZ78 ||
-                algoname == algo::LZVF_PRE || algoname == algo::LZVF_COUNT || algoname == algo::LZVF_CLEAN ||
-                algoname == algo::LZVF_PRE_NO_STREAM || algoname == algo::LZVF_COUNT_NO_STREAM)) {
+                algoname == algo::LZVF_PRE || algoname == algo::LZVF_COUNT ||
+                algoname == algo::LZVF_CLEAN || algoname == algo::LZVF_PRE_NO_STREAM ||
+                algoname == algo::LZVF_COUNT_NO_STREAM)) {
     codeSize = 0;
     usage(argv);
     exit(1);
@@ -87,6 +89,7 @@ int main(int argc, char* argv[]) {
   // std::cerr << "comp: out_fname=[" << out_fname << "]" << std::endl;
   if (algoname == algo::LZD) {
     UTIL::stringFromFile(inFile, s);
+    std::cout << "text_length: " << s.size() << std::endl;
     LZFF::LZD ff;
     LZFF::ff_compress(s, ff);
     std::vector<std::pair<unsigned int, unsigned int> > vars;
@@ -99,6 +102,7 @@ int main(int argc, char* argv[]) {
     std::vector<std::pair<unsigned int, unsigned int> > vars;
     LZ78::LZ78 lz78;
     UTIL::stringFromFile(inFile, s);
+    std::cout << "text_length: " << s.size() << std::endl;
     LZ78::compress(s, lz78);
     LZ78::seq2vars(lz78.seq, vars);
     slp2enc(vars, (unsigned int)s.size(), out_fname);

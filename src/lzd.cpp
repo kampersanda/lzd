@@ -93,8 +93,8 @@ void LZD::out(const std::string& out_fname) {
     if (this->seq[i].first > mask || (this->seq[i].first != 0 && this->seq[i].second > mask)) {
       std::cerr << "ERROR [" << this->seq[i].first << ", " << this->seq[i].second << "] bit=" << bit
                 << " first from bit=" << ((bit >> this->codeSize) & mask)
-                << " second from bit=" << (bit & mask) << " hoge=" << (bit << (out_remain - codePairSize))
-                << std::endl;
+                << " second from bit=" << (bit & mask)
+                << " hoge=" << (bit << (out_remain - codePairSize)) << std::endl;
     }
     assert(seq[i].first <= mask);
     assert(seq[i].second <= mask || seq[i].first == 0);  // root
@@ -141,7 +141,8 @@ unsigned int ff_compress(LZD& lz, NOT_STREAM::STree::Tree& tree) {
       firstFactor = cur_factor;
     } else {
       lz.seq.push_back(std::make_pair(firstFactor->fid, cur_factor->fid));
-      const NOT_STREAM::STree::Node* new_node = tree.insertFactorNode(firstFactor, p, cur_factor->depth);
+      const NOT_STREAM::STree::Node* new_node =
+          tree.insertFactorNode(firstFactor, p, cur_factor->depth);
 
       if (UTIL::DEBUG_LEVEL > 2) {
         const unsigned int prev_p = p - firstFactor->depth;
@@ -198,7 +199,8 @@ unsigned int mw_compress(const std::string& in_fname, const std::string& out_fna
   return lzseq->size();
 }
 
-unsigned int lzMW(std::vector<unsigned int>* lz, std::vector<std::pair<unsigned int, unsigned int> >* vars,
+unsigned int lzMW(std::vector<unsigned int>* lz,
+                  std::vector<std::pair<unsigned int, unsigned int> >* vars,
                   NOT_STREAM::STree::Tree& tree) {
   assert(tree.root != NULL);
   unsigned int p = 0;
@@ -239,6 +241,8 @@ unsigned int lzMW(std::vector<unsigned int>* lz, std::vector<std::pair<unsigned 
 
 void seq2vars(const std::vector<std::pair<unsigned int, unsigned int> >& in_seq,
               std::vector<std::pair<unsigned int, unsigned int> >& vars) {
+  std::cout << "#factors: " << in_seq.size() << std::endl;
+
   std::vector<unsigned int>* seq = new std::vector<unsigned int>();
   std::map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator itr;
   std::vector<unsigned int> s2v(in_seq.size());
@@ -408,7 +412,8 @@ unsigned int fflimit_compress(LZD& ff, NOT_STREAM::STreeLimit* tree) {
   }
 
   if (UTIL::DEBUG_LEVEL > 0) {
-    std::cerr << "num_fnodes=" << tree->getNumFNodes() << " num_nodes=" << tree->getNumNodes() << std::endl;
+    std::cerr << "num_fnodes=" << tree->getNumFNodes() << " num_nodes=" << tree->getNumNodes()
+              << std::endl;
     std::cerr << "ff.seq.size()=" << ff.seq.size() << std::endl;
   }
   return tree->getNumFNodes();
@@ -433,8 +438,8 @@ void fflimit_decompress(const LZD& ff, std::string& str, NOT_STREAM::STreeLimit&
   for (unsigned int i = 1; i < ff.seq.size(); i++) {
     if (UTIL::DEBUG_LEVEL > 2) {
       std::cerr << i << "/" << ff.seq.size() << " p=" << p << std::endl;
-      std::cerr << "seq: " << i << "/" << ff.seq.size() << " p=" << p << " first=" << ff.seq[i].first
-                << " second=" << ff.seq[i].second << std::endl;
+      std::cerr << "seq: " << i << "/" << ff.seq.size() << " p=" << p
+                << " first=" << ff.seq[i].first << " second=" << ff.seq[i].second << std::endl;
     }
 
     if (ff.seq[i].first == 0) {
